@@ -55,7 +55,7 @@ status.post("/refresh", async (c) => {
 });
 
 // Stream battery status. First send the cached value, then the live value
-status.get("/stream/", async (c) => {
+status.get("/stream", async (c) => {
   return streamSSE(c, async (stream) => {
     try {
       let data: Battery;
