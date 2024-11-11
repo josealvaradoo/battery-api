@@ -1,0 +1,22 @@
+{
+  "name": "battery-status-api",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "module": "src/index.ts",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "playwright": "^1.48.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "description": "API to get battery status",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --watch src/index.ts"
+  },
+  "type": "module",
+  "dependencies": {
+    "hono": "^4.6.8"
+  }
+}
