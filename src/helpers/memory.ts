@@ -28,12 +28,18 @@ export default class Memory {
   }
 
   public get<T = Value>(key: string): T | null {
-    // Check if the key exists and if it's still valid
-    if (!this.data[key] || this.data[key].expires < Date.now()) {
+    try {
+      const value = this.data[key]?.value as T ?? null;
+
+      // Check if the key exists and if it's still valid
+      if (this.data[key].expires < Date.now()) {
+        this.delete(key);
+      }
+
+      return value;
+    } catch (error) {
       return null;
     }
-
-    return this.data[key].value as T;
   }
 
   public delete(key: string): void {

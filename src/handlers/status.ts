@@ -20,8 +20,7 @@ status.get("/", async (c) => {
     // If cache value is not found or is expired, run the service
     // but else, return the cached value
     if (cache === "false" || !cachedValue) {
-      const batteryService = new BatteryService();
-      data = await batteryService.run();
+      data = await BatteryService.run();
       Memory.getInstance().set<Battery>("battery", data);
     } else {
       data = cachedValue;
@@ -39,8 +38,7 @@ status.get("/", async (c) => {
 // Refresh battery status on cache thought HTTP
 status.post("/refresh", async (c) => {
   try {
-    const batteryService = new BatteryService();
-    const status: Battery = await batteryService.run();
+    const status: Battery = await BatteryService.run();
 
     Memory.getInstance().set<Battery>("battery", status);
 
@@ -74,11 +72,10 @@ status.get("/stream", async (c) => {
         });
       }
 
-      const batteryService = new BatteryService();
-      data = await batteryService.run();
+      data = await BatteryService.run();
       Memory.getInstance().set<Battery>("battery", data);
 
-      await stream.sleep(3000);
+      await stream.sleep(2000);
 
       await stream.writeSSE({
         data: JSON.stringify({
