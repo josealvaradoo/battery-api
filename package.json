@@ -4,6 +4,7 @@
   "main": "src/index.ts",
   "module": "src/index.ts",
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.9",
     "@types/bun": "latest",
     "playwright": "^1.48.2"
   },
