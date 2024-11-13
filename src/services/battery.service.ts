@@ -1,4 +1,4 @@
-import { chromium, type Page } from "playwright";
+import { webkit, type Page } from "playwright";
 import { delay } from "../helpers";
 import type { Battery } from "../lib/battery/type";
 import { type User } from "../lib/user/type";
@@ -64,12 +64,13 @@ class BatteryService {
   }
 
   public async run(): Promise<Battery> {
-    const browser = await chromium.launch({ headless: true });
+    const browser = await webkit.launch({ headless: true });
     console.log("[Running] BatteryService");
 
     try {
       if (!this.page) {
         const context = await browser.newContext({
+          ignoreHTTPSErrors: true,
           userAgent:
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
         });
