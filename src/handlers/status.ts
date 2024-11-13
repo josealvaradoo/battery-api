@@ -75,7 +75,7 @@ status.get("/stream", async (c) => {
       data = await BatteryService.run();
       Memory.getInstance().set<Battery>("battery", data);
 
-      await stream.sleep(2000);
+      await stream.sleep(500);
 
       await stream.writeSSE({
         data: JSON.stringify({

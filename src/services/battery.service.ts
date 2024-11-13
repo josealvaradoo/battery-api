@@ -30,7 +30,7 @@ class BatteryService {
   private async getBatteryCapacity(page: Page): Promise<number> {
     const selector = ".animPan > .abs:nth-child(13) > .val";
 
-    await delay(2000);
+    await delay(500);
 
     await page.waitForSelector(selector);
 
@@ -66,7 +66,7 @@ class BatteryService {
 
   public async run(): Promise<Battery> {
     const browser = await webkit.launch({ headless: true });
-    console.log("[Running] BatteryService");
+    console.log("[Running]: BatteryService");
 
     try {
       const context = await browser.newContext({
