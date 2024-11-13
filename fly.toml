@@ -7,7 +7,7 @@ app = 'growatt-scrapping'
 primary_region = 'mia'
 
 [build]
-  dockerfile = ".docker./Dockerfile.local"
+  dockerfile = ".docker/Dockerfile.local"
 
 [http_service]
   internal_port = 3000
