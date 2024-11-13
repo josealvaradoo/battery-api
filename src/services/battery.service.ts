@@ -8,6 +8,7 @@ const DASHBOARD_URL = `${process.env.PROVIDER_URL}/index`;
 
 class BatteryService {
   private page: Page | undefined = undefined;
+  private cookies: string = "";
   private static instance: BatteryService;
 
   private constructor() { }
@@ -68,14 +69,16 @@ class BatteryService {
     console.log("[Running] BatteryService");
 
     try {
-      if (!this.page) {
-        const context = await browser.newContext({
-          ignoreHTTPSErrors: true,
-          userAgent:
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
-        });
+      const context = await browser.newContext({
+        ignoreHTTPSErrors: true,
+        userAgent:
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
+      });
 
-        this.page = await context.newPage();
+      this.page = await context.newPage();
+
+      if (!this.cookies) {
+        console.log("[Playwright]: No cookies found. Logging in...")
 
         await this.page.goto(LOGIN_URL);
         await this.page.waitForURL(LOGIN_URL);
@@ -84,12 +87,22 @@ class BatteryService {
           username: process.env.AUTH_USER!,
           password: Buffer.from(process.env.AUTH_PASS!, "base64").toString(),
         });
+
+        const cookies = await context.cookies();
+        this.cookies = JSON.stringify(cookies)
+      } else {
+        console.log("[Playwright]: Using cookies from memory")
+
+        await context.addCookies(JSON.parse(this.cookies));
+        await this.page.goto(DASHBOARD_URL);
       }
 
       await this.page.waitForURL(DASHBOARD_URL);
 
       const level = await this.getBatteryCapacity(this.page);
       const status = await this.getChargingStatus(this.page);
+
+      await browser.close();
 
       return {
         level,
