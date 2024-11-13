@@ -1,10 +1,12 @@
 import { Hono } from "hono";
 import { poweredBy } from "hono/powered-by";
 import { status } from "./handlers/status";
+import { timeout } from 'hono/timeout'
 
 const app = new Hono();
 
 app.use(poweredBy());
+app.use(timeout(30000));
 
 // Health check
 app.get("/", (c) => {
