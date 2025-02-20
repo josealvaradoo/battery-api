@@ -13,8 +13,7 @@ app.use("*", cors());
 
 // Health check
 app.get("/", (c) => {
-  c.status(200);
-  return c.html("Server is ok!");
+  return c.html("Server is ok!", 200);
 });
 
 app.route("/auth", auth);
