@@ -24,13 +24,16 @@ class BatteryService {
     await page.fill("#val_loginAccount", user.username);
     await page.fill("#val_loginPwd", user.password);
     await page.click("button[class$=loginB]");
+
+    await page.waitForURL(DASHBOARD_URL);
+
     return page;
   }
 
   private async getBatteryCapacity(page: Page): Promise<number> {
     const selector = ".animPan > .abs:nth-child(13) > .val";
 
-    await delay(500);
+    await delay(2000);
 
     await page.waitForSelector(selector);
 
@@ -62,6 +65,7 @@ class BatteryService {
 
   private dispose() {
     this.page = undefined;
+    this.cookies = ""
   }
 
   public async run(): Promise<Battery> {
@@ -83,21 +87,25 @@ class BatteryService {
         await this.page.goto(LOGIN_URL);
         await this.page.waitForURL(LOGIN_URL);
 
-        await this.auth(this.page, {
+        this.page = await this.auth(this.page, {
           username: process.env.AUTH_USER!,
           password: Buffer.from(process.env.AUTH_PASS!, "base64").toString(),
         });
 
-        const cookies = await context.cookies();
-        this.cookies = JSON.stringify(cookies)
+        console.log(this.page.url());
+
+        if (this.page.url() === DASHBOARD_URL) {
+          const cookies = await context.cookies();
+          this.cookies = JSON.stringify(cookies)
+          console.log("[Playwright]: Cookies saved in memory")
+        }
       } else {
         console.log("[Playwright]: Using cookies from memory")
 
         await context.addCookies(JSON.parse(this.cookies));
         await this.page.goto(DASHBOARD_URL);
+        await this.page.waitForURL(DASHBOARD_URL);
       }
-
-      await this.page.waitForURL(DASHBOARD_URL);
 
       const level = await this.getBatteryCapacity(this.page);
       const status = await this.getChargingStatus(this.page);
