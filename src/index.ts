@@ -1,7 +1,8 @@
 import { Hono } from "hono";
 import { poweredBy } from "hono/powered-by";
 import { status } from "./handlers/status";
-import { timeout } from 'hono/timeout'
+import { auth } from "./handlers/auth";
+import { timeout } from "hono/timeout";
 
 const app = new Hono();
 
@@ -14,6 +15,7 @@ app.get("/", (c) => {
   return c.html("Server is ok!");
 });
 
+app.route("/auth", auth);
 app.route("/status", status);
 
 export default app;
