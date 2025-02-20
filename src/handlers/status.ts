@@ -20,18 +20,18 @@ status.get("/", async (c) => {
     // If cache value is not found or is expired, run the service
     // but else, return the cached value
     if (cache === "false" || !cachedValue) {
+      console.log("Cached value not found or expired");
       data = await BatteryService.run();
       Memory.getInstance().set<Battery>("battery", data);
     } else {
+      console.log("Cached value found");
       data = cachedValue;
       isCached = true;
     }
 
-    c.status(200);
-    return c.json({ data, is_cached: isCached });
+    return c.json({ data, is_cached: isCached }, 200);
   } catch (error) {
-    c.status(500);
-    return c.json({ error: (error as Error).message });
+    return c.json({ error: (error as Error).message }, 500);
   }
 });
 
@@ -42,13 +42,9 @@ status.post("/refresh", async (c) => {
 
     Memory.getInstance().set<Battery>("battery", status);
 
-    c.status(200);
-    return c.json({
-      data: true,
-    });
+    return c.json({ data: true }, 200);
   } catch (error) {
-    c.status(500);
-    return c.json({ error: (error as Error).message });
+    return c.json({ error: (error as Error).message }, 500);
   }
 });
 
@@ -75,11 +71,11 @@ status.get("/stream", async (c) => {
       data = await BatteryService.run();
       Memory.getInstance().set<Battery>("battery", data);
 
-      await stream.sleep(500);
+      await stream.sleep(2000);
 
       await stream.writeSSE({
         data: JSON.stringify({
-          data: cachedValue,
+          data: data,
           is_cached: false,
         }),
       });
