@@ -11,7 +11,7 @@ class BatteryService {
   private cookies: string = "";
   private static instance: BatteryService;
 
-  private constructor() { }
+  private constructor() {}
 
   public static getInstance() {
     if (!BatteryService.instance) {
@@ -65,7 +65,7 @@ class BatteryService {
 
   private dispose() {
     this.page = undefined;
-    this.cookies = ""
+    this.cookies = "";
   }
 
   public async run(): Promise<Battery> {
@@ -82,7 +82,7 @@ class BatteryService {
       this.page = await context.newPage();
 
       if (!this.cookies) {
-        console.log("[Playwright]: No cookies found. Logging in...")
+        console.log("[Playwright]: No cookies found. Logging in...");
 
         await this.page.goto(LOGIN_URL);
         await this.page.waitForURL(LOGIN_URL);
@@ -92,15 +92,13 @@ class BatteryService {
           password: Buffer.from(process.env.AUTH_PASS!, "base64").toString(),
         });
 
-        console.log(this.page.url());
-
         if (this.page.url() === DASHBOARD_URL) {
           const cookies = await context.cookies();
-          this.cookies = JSON.stringify(cookies)
-          console.log("[Playwright]: Cookies saved in memory")
+          this.cookies = JSON.stringify(cookies);
+          console.log("[Playwright]: Cookies saved in memory");
         }
       } else {
-        console.log("[Playwright]: Using cookies from memory")
+        console.log("[Playwright]: Using cookies from memory");
 
         await context.addCookies(JSON.parse(this.cookies));
         await this.page.goto(DASHBOARD_URL);
@@ -116,7 +114,6 @@ class BatteryService {
         level,
         is_charging: status,
       };
-
     } catch (error: unknown) {
       this.dispose();
       await browser.close();
@@ -124,7 +121,7 @@ class BatteryService {
       return {
         level: 0,
         is_charging: true,
-      }
+      };
     }
   }
 }

@@ -21,12 +21,9 @@ status.get("/", async (c) => {
     // If cache value is not found or is expired, run the service
     // but else, return the cached value
     if (cache === "false" || !cachedValue) {
-      console.log("Cached value not found or expired");
       data = await retry(BatteryService.run.bind(BatteryService), 3);
       Memory.getInstance().set<Battery>("battery", data);
     } else {
-      console.log("Cached value found");
-      console.log(cachedValue);
       data = cachedValue;
       isCached = true;
     }
