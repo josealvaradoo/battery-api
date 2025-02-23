@@ -3,6 +3,7 @@ import type { Battery } from "../lib/battery/type";
 import Memory from "../helpers/memory";
 import BatteryService from "../services/battery.service";
 import { streamSSE } from "hono/streaming";
+import retry from "../helpers/retry.helper";
 
 const status = new Hono();
 
@@ -21,10 +22,11 @@ status.get("/", async (c) => {
     // but else, return the cached value
     if (cache === "false" || !cachedValue) {
       console.log("Cached value not found or expired");
-      data = await BatteryService.run();
+      data = await retry(BatteryService.run.bind(BatteryService), 3);
       Memory.getInstance().set<Battery>("battery", data);
     } else {
       console.log("Cached value found");
+      console.log(cachedValue);
       data = cachedValue;
       isCached = true;
     }
