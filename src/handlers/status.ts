@@ -14,7 +14,7 @@ status.get("/", async (c) => {
     let isCached = false;
     const { cache } = c.req.query();
 
-    // First, check if exista a previous cached value in memory
+    // First, check whether exists a previous cached value in memory
     const memory = Memory.getInstance();
     const cachedValue = memory.get<Battery>("battery");
 
