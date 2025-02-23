@@ -1,9 +1,14 @@
+import type { User } from "../lib/user/type";
+
 export class UserNotFoundError extends Error {}
 export class InvalidCredentialsError extends Error {}
 
+type Username = User["username"];
+type Password = User["password"];
+
 class AuthService {
-  public login(email: string, password: string) {
-    if (email != process.env.AUTH_USER) {
+  public login(username: Username, password: Password): User {
+    if (username != process.env.AUTH_USER) {
       console.error("Invalid user");
       throw new UserNotFoundError("User not found");
     }
@@ -13,8 +18,7 @@ class AuthService {
       throw new InvalidCredentialsError("Invalid credentials");
     }
 
-    console.info("User logged in");
-    return { email, password: btoa(password) };
+    return { username, password: btoa(password) };
   }
 }
 

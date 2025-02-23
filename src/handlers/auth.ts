@@ -9,9 +9,12 @@ const auth = new Hono();
 auth.post("/", async (c) => {
   const body = await c.req.json();
   try {
-    const { email, password } = AuthService.login(body.email, body.password);
+    const { username, password } = AuthService.login(
+      body.username,
+      body.password,
+    );
 
-    return c.json({ data: { email, password } }, 200);
+    return c.json({ data: { username, password } }, 200);
   } catch (error) {
     if (
       error instanceof UserNotFoundError ||
