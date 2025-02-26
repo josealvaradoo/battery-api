@@ -11,7 +11,7 @@
   },
   "description": "API to get battery status",
   "scripts": {
-    "start": "node ./dist/index.js",
+    "start": "bun src/index.ts",
     "dev": "bun --watch src/index.ts",
     "build": "tsc"
   },
