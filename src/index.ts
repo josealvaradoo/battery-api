@@ -19,6 +19,4 @@ app.get("/", (c) => {
 app.route("/auth", auth);
 app.route("/status", status);
 
-export default {
-  fetch: app.fetch,
-};
+export default app;

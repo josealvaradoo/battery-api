@@ -1,8 +1,7 @@
 {
   "name": "battery-api",
   "version": "0.1.1",
-  "main": "src/index.ts",
-  "module": "src/index.ts",
+  "main": "dist/index.js",
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.9",
     "@types/bun": "latest"
@@ -12,11 +11,10 @@
   },
   "description": "API to get battery status",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node ./dist/index.js",
     "dev": "bun --watch src/index.ts",
     "build": "tsc"
   },
-  "type": "module",
   "dependencies": {
     "hono": "^4.6.8",
     "playwright": "^1.48.2"
