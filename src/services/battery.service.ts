@@ -117,7 +117,7 @@ class BatteryService {
     } catch (error: unknown) {
       this.dispose();
       await browser.close();
-      console.error("[Error]:", (error as ErrnoException).message);
+      console.error("[Error]:", (error as Error).message);
       return {
         level: 0,
         is_charging: true,
