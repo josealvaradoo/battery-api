@@ -1,4 +1,4 @@
-FROM oven/bun:1.1.4-slim as base
+FROM oven/bun:1.1.4-slim as build
 
 # Bun app lives here
 WORKDIR /app
@@ -6,29 +6,25 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV="production"
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
-
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-  apt-get install --no-install-recommends -y build-essential pkg-config python-is-python3
-
 # Install node modules
-COPY package.json ./
-RUN bun install --ci
+COPY bun.lockb package.json ./
+RUN bun install 
 
 # Copy application code
 COPY . .
 
+# Transpile TypeScript to minified JavaScript using Bun
+RUN bun build ./src/index.ts --minify --outdir=./dist
+
 # Final stage for app image
-FROM base
+FROM build 
+
+WORKDIR /app
 
 # Copy built application
-COPY --from=build /app /app
+COPY --from=build ./app/dist .
 
-# Install dependencies for playwright
-RUN bunx -y playwright install --with-deps
+EXPOSE 3000
 
 # Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD [ "bun", "run", "start" ]
+CMD [ "bun", "index.js" ]

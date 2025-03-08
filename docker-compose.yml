@@ -2,8 +2,6 @@ services:
   app:
     build:
       context: .
-      dockerfile: .docker/Dockerfile.local
+      dockerfile: .docker/Dockerfile.production
     ports:
       - 3000:3000
-    volumes:
-      - .:/app

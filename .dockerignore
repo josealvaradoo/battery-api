@@ -4,13 +4,8 @@
 # Node
 node_modules
 
-# Docker related
-.docker
-.dockerignore
-
 # Environment files
 .env.example
-.env.local
 
 # Git related
 .git
@@ -20,6 +15,3 @@ node_modules
 # Documentation
 README.md
 
-# Configuration files
-docker-compose.yml
-fly.toml

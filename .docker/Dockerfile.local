@@ -7,9 +7,6 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV="development"
 
-# Install dependencies for playwright
-RUN bunx -y playwright install --with-deps webkit
-
 # Install node modules
 COPY bun.lockb package.json ./
 RUN bun install --ci
@@ -19,4 +16,4 @@ COPY . .
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "bun", "run", "--timeout=30000", "start" ]
+CMD [ "bun", "--watch", "src/index.ts" ]
