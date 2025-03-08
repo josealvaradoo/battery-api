@@ -4,22 +4,19 @@ import { poweredBy } from "hono/powered-by";
 import { status } from "./handlers/status";
 import { auth } from "./handlers/auth";
 import { timeout } from "hono/timeout";
-import { jwt } from "hono/jwt";
+import { authenticated } from "./middlewares/jwt";
 
 const app = new Hono();
 
 app.use(poweredBy());
 app.use(timeout(30000));
 app.use("*", cors());
+app.use("/status/*", authenticated);
 
 // Health check
-app.get("/", (c) => {
-  return c.html("Server is ok!", 200);
-});
+app.get("/", ({ json }) => json({ data: "ok" }, 200));
 
 app.route("/auth", auth);
-
-app.use("/status/*", jwt({ secret: process.env.JWT_SECRET! }));
 app.route("/status", status);
 
 console.log("Starting app...");

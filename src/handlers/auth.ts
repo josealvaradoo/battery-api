@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import AuthService, { InvalidCredentialsError } from "../services/auth.service";
+import { authenticated } from "../middlewares/jwt";
 
 const auth = new Hono();
 
@@ -16,6 +17,10 @@ auth.post("", async (c) => {
     }
     return c.json({ error: (error as Error).message }, 500);
   }
+});
+
+auth.get("/verify", authenticated, async (c) => {
+  return c.json({ data: "authenticated" }, 200);
 });
 
 export { auth };
