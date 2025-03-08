@@ -1,13 +1,15 @@
+import { sign } from "hono/jwt";
 import type { User } from "../lib/user/type";
 
 export class UserNotFoundError extends Error {}
 export class InvalidCredentialsError extends Error {}
+export class InvalidSession extends Error {}
 
 type Username = User["username"];
 type Password = User["password"];
 
 class AuthService {
-  public login(username: Username, password: Password): User {
+  public async login(username: Username, password: Password): Promise<string> {
     if (username != process.env.AUTH_USER) {
       console.error("Invalid user");
       throw new UserNotFoundError("User not found");
@@ -18,7 +20,13 @@ class AuthService {
       throw new InvalidCredentialsError("Invalid credentials");
     }
 
-    return { username, password: btoa(password) };
+    const payload = {
+      sub: btoa(username) + "@" + btoa(password),
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // Token expires in 30 days
+    };
+    const token = await sign(payload, process.env.JWT_SECRET!);
+
+    return token;
   }
 }
 

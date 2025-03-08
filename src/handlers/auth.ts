@@ -1,25 +1,17 @@
 import { Hono } from "hono";
-import AuthService, {
-  UserNotFoundError,
-  InvalidCredentialsError,
-} from "../services/auth.service";
+import AuthService, { InvalidCredentialsError } from "../services/auth.service";
 
 const auth = new Hono();
 
-auth.post("/", async (c) => {
-  const body = await c.req.json();
+auth.post("", async (c) => {
   try {
-    const { username, password } = AuthService.login(
-      body.username,
-      body.password,
-    );
+    const { username, password } = await c.req.json();
 
-    return c.json({ data: { username, password } }, 200);
+    const token = await AuthService.login(username, password);
+
+    return c.json({ token }, 200);
   } catch (error) {
-    if (
-      error instanceof UserNotFoundError ||
-      error instanceof InvalidCredentialsError
-    ) {
+    if (error instanceof InvalidCredentialsError) {
       return c.json({ error: error.message }, 401);
     }
     return c.json({ error: (error as Error).message }, 500);

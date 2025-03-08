@@ -4,6 +4,7 @@ import { poweredBy } from "hono/powered-by";
 import { status } from "./handlers/status";
 import { auth } from "./handlers/auth";
 import { timeout } from "hono/timeout";
+import { jwt } from "hono/jwt";
 
 const app = new Hono();
 
@@ -17,6 +18,8 @@ app.get("/", (c) => {
 });
 
 app.route("/auth", auth);
+
+app.use("/status/*", jwt({ secret: process.env.JWT_SECRET! }));
 app.route("/status", status);
 
 console.log("Starting app...");
