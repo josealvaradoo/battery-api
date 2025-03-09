@@ -1,15 +1,18 @@
-import { sign } from "hono/jwt";
-import type { User } from "../lib/user/type";
+import type { User, JWTUser } from "../lib/user/type";
+import { OAuth2Client } from "google-auth-library";
+import { signJWT } from "../helpers/jwt.helper";
 
 export class UserNotFoundError extends Error {}
 export class InvalidCredentialsError extends Error {}
 export class InvalidSession extends Error {}
 
+const client = new OAuth2Client(process.env.OAUTH_GOOGLE_CLIENT_ID!);
+
 type Username = User["username"];
 type Password = User["password"];
 
 class AuthService {
-  public async login(username: Username, password: Password): Promise<string> {
+  public async signIn(username: Username, password: Password): Promise<string> {
     if (username != process.env.AUTH_USER) {
       console.error("Invalid user");
       throw new UserNotFoundError("User not found");
@@ -20,13 +23,37 @@ class AuthService {
       throw new InvalidCredentialsError("Invalid credentials");
     }
 
-    const payload = {
-      sub: btoa(username) + "@" + btoa(password),
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // Token expires in 30 days
-    };
-    const token = await sign(payload, process.env.JWT_SECRET!);
+    return signJWT({
+      sub: btoa(username),
+      user: {
+        name: process.env.SUPER_ADMIN_NAME,
+        email: process.env.SUPER_ADMIN_EMAIL,
+        email_verified: true,
+        picture: process.env.SUPER_ADMIN_PICTURE,
+      } as JWTUser,
+    });
+  }
 
-    return token;
+  public async signInWithGoogle(idToken: string): Promise<string> {
+    const ticket = await client.verifyIdToken({
+      idToken: idToken,
+    });
+
+    const data = ticket.getPayload();
+
+    if (!data) {
+      throw new Error();
+    }
+
+    return signJWT({
+      sub: data.sub,
+      user: {
+        email: data.email,
+        name: data.name,
+        picture: data.picture,
+        email_verified: data.email_verified,
+      } as JWTUser,
+    });
   }
 }
 
