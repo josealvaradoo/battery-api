@@ -23,11 +23,25 @@ auth.post("/google", async (c: Context) => {
   try {
     return c.json({ token: await AuthService.signInWithGoogle(token) }, 200);
   } catch (error) {
+    console.error(error);
     if (error instanceof Error) {
       return c.json({ error: error.message }, 401);
     }
 
     return c.json({ error: "Invalid token" }, 401);
+  }
+});
+
+auth.post("/google/revoke", async (c: Context) => {
+  const { token } = await c.req.json();
+  try {
+    return c.json(
+      { success: await AuthService.revokeGoogleSession(token) },
+      200,
+    );
+  } catch (error) {
+    console.error(error);
+    return c.json({ error: error }, 500);
   }
 });
 

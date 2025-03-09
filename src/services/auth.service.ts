@@ -55,6 +55,16 @@ class AuthService {
       } as JWTUser,
     });
   }
+
+  public async revokeGoogleSession(token: string): Promise<boolean> {
+    try {
+      await client.revokeToken(token);
+      return true;
+    } catch (error) {
+      console.error("Failed to revoke Google session:", error);
+      throw new InvalidSession("Failed to revoke Google session");
+    }
+  }
 }
 
 export default new AuthService();
