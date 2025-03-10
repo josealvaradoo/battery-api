@@ -1,4 +1,4 @@
-import { sign } from "hono/jwt";
+import { sign, decode } from "hono/jwt";
 import { JWTUser } from "../lib/user/type";
 
 type Payload = {
@@ -17,4 +17,13 @@ export const signJWT = async (payload: Payload): Promise<string> => {
     },
     process.env.JWT_SECRET!,
   );
+};
+
+export const getUserFromJWT = async (t: string): Promise<JWTUser | null> => {
+  if (!t) {
+    return null;
+  }
+
+  const { payload } = decode(t);
+  return payload.user as JWTUser;
 };
