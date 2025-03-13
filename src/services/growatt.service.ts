@@ -1,5 +1,7 @@
 import { Battery } from "../lib/battery/type";
 
+const DISCHARGING_STATUS = [2, 3];
+
 class GrowattService {
   public async get(): Promise<Battery> {
     try {
@@ -25,7 +27,7 @@ class GrowattService {
 
       return {
         level: storage.capacity,
-        is_charging: storage.status != 3,
+        is_charging: !DISCHARGING_STATUS.includes(storage.status),
       };
     } catch (error) {
       console.error(error);
