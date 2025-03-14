@@ -14,7 +14,7 @@ RUN bun install
 COPY . .
 
 # Transpile TypeScript to minified JavaScript using Bun
-RUN bun build ./src/index.ts --minify --outdir=./dist
+RUN bun build ./src/index.ts --minify --outdir=./dist --target=bun
 
 # Final stage for app image
 FROM build 
