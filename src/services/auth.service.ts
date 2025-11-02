@@ -41,8 +41,13 @@ class AuthService {
 
     const data = ticket.getPayload();
 
-    if (!data) {
+    if (!data || !data.email) {
       throw new Error();
+    }
+
+    const whitelist = process.env.GOOGLE_EMAILS_WHITELIST?.split(",") || [];
+    if (!whitelist.includes(data.email)) {
+      throw new InvalidCredentialsError("User not in whitelist");
     }
 
     return signJWT({
