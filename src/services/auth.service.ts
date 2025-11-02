@@ -12,6 +12,14 @@ type Username = User["username"];
 type Password = User["password"];
 
 class AuthService {
+  /**
+   * Authenticates a user using username and password credentials
+   * @deprecated This method is deprecated. Use signInWithGoogle instead for OAuth authentication.
+   * @param {string} username - The username for authentication
+   * @param {string} password - The password for authentication
+   * @returns {Promise<string>} A JWT token for the authenticated user
+   * @throws {InvalidCredentialsError} When credentials are invalid or user not found
+   */
   public async signIn(username: Username, password: Password): Promise<string> {
     if (username != process.env.AUTH_USER) {
       console.error("Invalid user");
@@ -34,6 +42,13 @@ class AuthService {
     });
   }
 
+  /**
+   * Authenticates a user using Google OAuth ID token
+   * @param {string} idToken - The Google OAuth ID token to verify
+   * @returns {Promise<string>} A JWT token for the authenticated user
+   * @throws {Error} When token verification fails or payload is invalid
+   * @throws {InvalidCredentialsError} When user email is not in the whitelist
+   */
   public async signInWithGoogle(idToken: string): Promise<string> {
     const ticket = await client.verifyIdToken({
       idToken: idToken,
@@ -47,7 +62,7 @@ class AuthService {
 
     const whitelist = process.env.GOOGLE_EMAILS_WHITELIST?.split(",") || [];
     if (!whitelist.includes(data.email)) {
-      throw new InvalidCredentialsError("User not in whitelist");
+      throw new InvalidCredentialsError("User is not in whitelist");
     }
 
     return signJWT({
@@ -61,6 +76,12 @@ class AuthService {
     });
   }
 
+  /**
+   * Revokes a Google OAuth session token
+   * @param {string} token - The Google OAuth token to revoke
+   * @returns {Promise<boolean>} True if the token was successfully revoked
+   * @throws {InvalidSession} When token revocation fails
+   */
   public async revokeGoogleSession(token: string): Promise<boolean> {
     try {
       await client.revokeToken(token);
@@ -71,6 +92,12 @@ class AuthService {
     }
   }
 
+  /**
+   * Retrieves user information from a JWT token
+   * @param {string} token - The JWT token to decode and extract user information from
+   * @returns {Promise<JWTUser | null>} The user object if token is valid, null otherwise
+   * @throws {Error} When token is not provided
+   */
   public async getUserFromToken(token: string): Promise<JWTUser | null> {
     if (!token) {
       throw new Error("token is required");

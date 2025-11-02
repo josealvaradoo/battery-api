@@ -3,6 +3,11 @@ import { Battery } from "../lib/battery/type";
 const DISCHARGING_STATUS = [2, 3];
 
 class GrowattService {
+  /**
+   * Retrieves battery data from the Growatt API
+   * @returns {Promise<Battery>} Battery object containing level and charging status
+   * @throws {Error} When the API request fails or returns an error
+   */
   public async get(): Promise<Battery> {
     try {
       const url = process.env.GROWATT_URL! + "/queryLastData";
