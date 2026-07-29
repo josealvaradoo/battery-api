@@ -29,3 +29,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Build
 dist/
+
+# AI agents
+.opencode/
