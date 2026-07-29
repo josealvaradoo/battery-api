@@ -33,7 +33,7 @@ class GrowattService {
       return {
         level: storage.capacity,
         is_charging: !DISCHARGING_STATUS.includes(storage.status),
-        consumption_watts: storage.pacToUser,
+        output_power: storage.outPutPower,
       };
     } catch (error) {
       console.error(error);

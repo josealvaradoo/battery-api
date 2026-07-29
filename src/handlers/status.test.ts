@@ -6,7 +6,7 @@ import type { Battery } from "../lib/battery/type";
 const mockBattery: Battery = {
   level: 85,
   is_charging: true,
-  consumption_watts: 420,
+  output_power: 420,
 };
 
 const mockGet = mock((): Promise<Battery> => Promise.resolve(mockBattery));
@@ -65,7 +65,7 @@ describe("GET /status", () => {
     const cached: Battery = {
       level: 50,
       is_charging: false,
-      consumption_watts: 180,
+      output_power: 180,
     };
     mockMemoryGet.mockReturnValue(cached);
 
@@ -82,7 +82,7 @@ describe("GET /status", () => {
     const cached: Battery = {
       level: 50,
       is_charging: false,
-      consumption_watts: 180,
+      output_power: 180,
     };
     mockMemoryGet.mockReturnValue(cached);
 
@@ -106,20 +106,20 @@ describe("GET /status", () => {
     expect(body.error).toBe("Growatt unavailable");
   });
 
-  test("returns consumption_watts as a number on fresh data", async () => {
+  test("returns output_power as a number on fresh data", async () => {
     const res = await status.request("/");
     const body = await res.json();
 
     expect(res.status).toBe(200);
-    expect(typeof body.data.consumption_watts).toBe("number");
-    expect(body.data.consumption_watts).toBe(420);
+    expect(typeof body.data.output_power).toBe("number");
+    expect(body.data.output_power).toBe(420);
   });
 
-  test("returns consumption_watts as a number on cached data", async () => {
+  test("returns output_power as a number on cached data", async () => {
     const cached: Battery = {
       level: 50,
       is_charging: false,
-      consumption_watts: 180,
+      output_power: 180,
     };
     mockMemoryGet.mockReturnValue(cached);
 
@@ -127,7 +127,7 @@ describe("GET /status", () => {
     const body = await res.json();
 
     expect(res.status).toBe(200);
-    expect(typeof body.data.consumption_watts).toBe("number");
-    expect(body.data.consumption_watts).toBe(180);
+    expect(typeof body.data.output_power).toBe("number");
+    expect(body.data.output_power).toBe(180);
   });
 });
