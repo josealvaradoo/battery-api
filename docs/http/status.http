@@ -1,0 +1,26 @@
+### 
+
+@url = http://localhost:3000/status
+@api_key = gt_live_xTznIY6ECY5sssXFdDarD8zzzdAW2Nog
+
+
+### Get battery status (cached)
+
+GET {{url}} HTTP/1.1
+
+
+### Get battery status (force refresh, bypass cache)
+
+GET {{url}}?cache=false HTTP/1.1
+
+
+### Get battery status with API key auth
+
+GET {{url}} HTTP/1.1
+x-api-key: {{api_key}}
+
+
+### Get battery status with JWT auth
+
+GET {{url}} HTTP/1.1
+Authorization: Bearer {{jwt}}
