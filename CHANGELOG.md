@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0 (2026-07-29)
+
+---
+
+### Features
+
+- status: expose household power consumption as `consumption_watts` (number) sourced from Growatt's `pacToUser` field
+
 ## 0.2.0 (2026-07-29)
 
 ---
