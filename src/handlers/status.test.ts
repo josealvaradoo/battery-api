@@ -3,7 +3,11 @@ import type { Battery } from "../lib/battery/type";
 
 /* ---------- Mocks ---------- */
 
-const mockBattery: Battery = { level: 85, is_charging: true };
+const mockBattery: Battery = {
+  level: 85,
+  is_charging: true,
+  consumption_watts: 420,
+};
 
 const mockGet = mock((): Promise<Battery> => Promise.resolve(mockBattery));
 
@@ -58,7 +62,11 @@ describe("GET /status", () => {
   });
 
   test("returns cached data with 200 when cache exists", async () => {
-    const cached: Battery = { level: 50, is_charging: false };
+    const cached: Battery = {
+      level: 50,
+      is_charging: false,
+      consumption_watts: 180,
+    };
     mockMemoryGet.mockReturnValue(cached);
 
     const res = await status.request("/");
@@ -71,7 +79,11 @@ describe("GET /status", () => {
   });
 
   test("forces refresh and updates cache when cache=false", async () => {
-    const cached: Battery = { level: 50, is_charging: false };
+    const cached: Battery = {
+      level: 50,
+      is_charging: false,
+      consumption_watts: 180,
+    };
     mockMemoryGet.mockReturnValue(cached);
 
     const res = await status.request("/?cache=false");
@@ -92,5 +104,30 @@ describe("GET /status", () => {
 
     expect(res.status).toBe(500);
     expect(body.error).toBe("Growatt unavailable");
+  });
+
+  test("returns consumption_watts as a number on fresh data", async () => {
+    const res = await status.request("/");
+    const body = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(typeof body.data.consumption_watts).toBe("number");
+    expect(body.data.consumption_watts).toBe(420);
+  });
+
+  test("returns consumption_watts as a number on cached data", async () => {
+    const cached: Battery = {
+      level: 50,
+      is_charging: false,
+      consumption_watts: 180,
+    };
+    mockMemoryGet.mockReturnValue(cached);
+
+    const res = await status.request("/");
+    const body = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(typeof body.data.consumption_watts).toBe("number");
+    expect(body.data.consumption_watts).toBe(180);
   });
 });
