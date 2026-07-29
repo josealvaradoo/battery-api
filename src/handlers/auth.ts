@@ -34,6 +34,7 @@ auth.post("", async (c: Context) => {
  */
 auth.post("/google", async (c: Context) => {
   const { token } = await c.req.json();
+  console.log("token:", token);
   try {
     if (!token) {
       throw new Error("a token is required");
