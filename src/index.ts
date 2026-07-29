@@ -4,14 +4,14 @@ import { poweredBy } from "hono/powered-by";
 import { status } from "./handlers/status";
 import { auth } from "./handlers/auth";
 import { timeout } from "hono/timeout";
-import { authenticated } from "./middlewares/jwt";
+import { authenticate } from "./middlewares/auth-router";
 
 const app = new Hono();
 
 app.use(poweredBy());
 app.use(timeout(30000));
 app.use("*", cors());
-app.use("/status/*", authenticated);
+app.use("/status/*", authenticate);
 
 // Health check
 app.get("/", ({ json }) => json({ data: "ok" }, 200));
