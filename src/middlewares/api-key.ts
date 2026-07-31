@@ -19,23 +19,27 @@ const secureCompare = (a: string, b: string): boolean => {
   return mismatch === 0;
 };
 
+export const validateApiKey = (provided: string): void => {
+  if (!provided) {
+    throw new CustomApiKeyError("api key is not provided");
+  }
+
+  const whitelist = getWhitelist();
+  if (whitelist.length === 0) {
+    throw new CustomApiKeyError("api key whitelist is not configured");
+  }
+
+  const isValid = whitelist.some((key) => secureCompare(provided, key));
+  if (!isValid) {
+    throw new CustomApiKeyError("invalid api key");
+  }
+};
+
 export const apiKeyAuth = async (c: Context, next: Next) => {
   try {
     const provided = c.req.header("x-api-key");
 
-    if (!provided) {
-      throw new CustomApiKeyError("api key is not provided");
-    }
-
-    const whitelist = getWhitelist();
-    if (whitelist.length === 0) {
-      throw new CustomApiKeyError("api key whitelist is not configured");
-    }
-
-    const isValid = whitelist.some((key) => secureCompare(provided, key));
-    if (!isValid) {
-      throw new CustomApiKeyError("invalid api key");
-    }
+    validateApiKey(provided!);
 
     return next();
   } catch (error) {
