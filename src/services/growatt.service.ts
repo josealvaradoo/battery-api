@@ -1,4 +1,5 @@
 import { Battery } from "../lib/battery/type";
+import { logger } from "../helpers";
 
 const DISCHARGING_STATUS = [2, 3];
 
@@ -36,7 +37,7 @@ class GrowattService {
         output_power: storage.outPutPower,
       };
     } catch (error) {
-      console.error(error);
+      logger.error("Growatt fetch failed", { error });
       throw error;
     }
   }

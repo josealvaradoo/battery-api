@@ -1,6 +1,7 @@
 import type { User, JWTUser } from "../lib/user/type";
 import { OAuth2Client } from "google-auth-library";
 import { getUserFromJWT, signJWT } from "../helpers/jwt.helper";
+import { logger } from "../helpers";
 
 export class UserNotFoundError extends Error {}
 export class InvalidCredentialsError extends Error {}
@@ -22,12 +23,12 @@ class AuthService {
    */
   public async signIn(username: Username, password: Password): Promise<string> {
     if (username != process.env.AUTH_USER) {
-      console.error("Invalid user");
+      logger.warn("Invalid user", { username });
       throw new UserNotFoundError("User not found");
     }
 
     if (password != atob(process.env.AUTH_PASS!)) {
-      console.error("Invalid password");
+      logger.warn("Invalid password");
       throw new InvalidCredentialsError("Invalid credentials");
     }
 
@@ -87,7 +88,7 @@ class AuthService {
       await client.revokeToken(token);
       return true;
     } catch (error) {
-      console.error("Failed to revoke Google session:", error);
+      logger.error("Failed to revoke Google session", { error });
       throw new InvalidSession("Failed to revoke Google session");
     }
   }

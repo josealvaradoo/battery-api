@@ -6,6 +6,8 @@
  * @returns The result of the successful execution of the function.
  * @throws The error if all retries fail.
  */
+import { logger } from "./logger.helper";
+
 export default async function retry<T>(
   func: () => Promise<T>,
   maxRetries: number = 3,
@@ -15,10 +17,10 @@ export default async function retry<T>(
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      console.log(`Attempt ${attempt} of ${maxRetries}`);
+      logger.debug(`Attempt ${attempt} of ${maxRetries}`);
       return await func();
     } catch (error) {
-      console.error(`Attempt ${attempt} failed: ${(error as Error).message}`);
+      logger.warn(`Attempt ${attempt} failed: ${(error as Error).message}`);
       lastError = error as Error;
 
       if (attempt < maxRetries) {

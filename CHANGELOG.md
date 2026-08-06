@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 (2026-08-06)
+
+---
+
+- logger: add new middleware to log every endpoint triggered
+
 ## 0.3.0 (2026-07-29)
 
 ---

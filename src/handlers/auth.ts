@@ -1,6 +1,7 @@
 import { Context, Hono } from "hono";
 import AuthService from "../services/auth.service";
 import { authenticated } from "../middlewares/jwt";
+import { logger } from "../helpers";
 
 const auth = new Hono();
 
@@ -34,7 +35,6 @@ auth.post("", async (c: Context) => {
  */
 auth.post("/google", async (c: Context) => {
   const { token } = await c.req.json();
-  console.log("token:", token);
   try {
     if (!token) {
       throw new Error("a token is required");
@@ -42,7 +42,7 @@ auth.post("/google", async (c: Context) => {
 
     return c.json({ token: await AuthService.signInWithGoogle(token) }, 200);
   } catch (error) {
-    console.error(error);
+    logger.error("Google auth failed", { error });
     if (error instanceof Error) {
       return c.json({ error: error.message }, 401);
     }
@@ -66,7 +66,7 @@ auth.post("/google/revoke", async (c: Context) => {
       200,
     );
   } catch (error) {
-    console.error(error);
+    logger.error("Google revoke failed", { error });
     return c.json({ error: error }, 500);
   }
 });
@@ -96,7 +96,7 @@ auth.get("/profile", authenticated, async (c: Context) => {
     const user = await AuthService.getUserFromToken(token!);
     return c.json({ data: user }, 200);
   } catch (error) {
-    console.error(error);
+    logger.error("Profile fetch failed", { error });
     return c.json({ error: error }, 500);
   }
 });
