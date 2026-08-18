@@ -32,6 +32,8 @@ Add a new `POST /alexa` endpoint that serves as the HTTPS backend for an Amazon 
 - FR-14: The system shall include a `Simple` card in the response with the same text as the `outputSpeech` for Echo Show devices and the Alexa app.
 - FR-15: The system shall return a Spanish error message as an Alexa-formatted response (not an HTTP error) when the Growatt upstream fails, and shall end the session.
 - FR-16: The system shall provide a complete Alexa interaction model JSON file (es-US locale) ready for import into the Alexa Developer Console or ASK CLI.
+- FR-17: The system shall expose a public `GET /alexa/privacy` endpoint that returns HTTP 200 with the privacy policy HTML document, without requiring authentication.
+- FR-18: The system shall expose a public `GET /alexa/terms` endpoint that returns HTTP 200 with the terms of use HTML document, without requiring authentication.
 
 ## Acceptance Criteria (EARS)
 
@@ -43,6 +45,8 @@ Add a new `POST /alexa` endpoint that serves as the HTTPS backend for an Amazon 
 - The system shall always include a `response.outputSpeech` object with `type: "PlainText"` for all spoken responses.
 - The system shall always include a `response.card` object of type `"Simple"` containing the same text as the `outputSpeech`.
 - The system shall respond in Spanish for every intent and request type.
+- The system shall serve the privacy policy and terms of use documents as HTML with `Content-Type: text/html`.
+- The system shall keep the `GET /alexa/privacy` and `GET /alexa/terms` endpoints outside the `alexaAuth` middleware scope.
 - The system shall route all business logic through `AlexaService` and keep `handlers/alexa.ts` free of business logic.
 - The system shall define all Alexa-related TypeScript types in `src/lib/alexa/type.ts` using no `any`.
 
@@ -56,6 +60,8 @@ Add a new `POST /alexa` endpoint that serves as the HTTPS backend for an Amazon 
 - When the request type is `IntentRequest` and the intent name is `AMAZON.CancelIntent` or `AMAZON.StopIntent`, the system shall return a Spanish goodbye message with `shouldEndSession: true`.
 - When the request type is `SessionEndedRequest`, the system shall return a response with no `outputSpeech` and `shouldEndSession: true`.
 - When the request type is `IntentRequest` and the intent name is not recognized, the system shall return a Spanish fallback message with `shouldEndSession: false`.
+- When a `GET /alexa/privacy` request arrives, the system shall return HTTP 200 with the privacy policy HTML document.
+- When a `GET /alexa/terms` request arrives, the system shall return HTTP 200 with the terms of use HTML document.
 - When the cached battery data exists and is not expired, the system shall use it without calling the Growatt upstream.
 - When the cached battery data is missing or expired, the system shall fetch fresh data from GrowattService with retry and update the cache.
 
@@ -70,6 +76,7 @@ Add a new `POST /alexa` endpoint that serves as the HTTPS backend for an Amazon 
 - If the request body is not valid JSON or is missing the `context.System.application.applicationId` field, then the system shall return HTTP 401.
 - If the GrowattService throws an error during a `BatteryLevelIntent` or `HomeConsumptionIntent` request, then the system shall return "Lo siento, no pude obtener la información del inversor en este momento. Intenta de nuevo más tarde." with `shouldEndSession: true`.
 - If the request body contains unknown properties, then the system shall not break and shall process the known fields.
+- If a request arrives at `GET /alexa/privacy` or `GET /alexa/terms` without a valid skill ID, then the system shall still return HTTP 200 with the HTML document (these endpoints are public).
 
 ### Optional features
 
