@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.0 (2026-08-17)
+
+---
+
+### Features
+
+- alexa: add POST /alexa endpoint as backend for the "planta" custom skill (es-US, Spanish responses)
+- alexa: verify skill id against ALEXA_SKILL_IDS whitelist before processing requests
+- alexa: handle battery level and home consumption intents with cached Growatt data
+- alexa: add interaction model JSON for the Alexa Developer Console
+- tests: isolate test files to prevent mock.module leakage between suites
+
 ## 0.4.0 (2026-08-06)
 
 ---
