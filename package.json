@@ -14,7 +14,7 @@
     "start": "bun src/index.ts",
     "dev": "bun --watch src/index.ts",
     "build": "tsc",
-    "test": "bun test"
+    "test": "bun test --isolate"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
