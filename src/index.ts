@@ -22,7 +22,9 @@ app.use("/status/*", authenticate);
 // alexaAuth must run after cors() and timeout() so those still apply to
 // /alexa requests. It reads the JSON body via c.req.json(), which Hono caches,
 // so the handler can read the same body again without consuming the stream.
-app.use("/alexa/*", alexaAuth);
+// The middleware matches only the exact /alexa path (POST /alexa), leaving the
+// public GET /alexa/privacy and GET /alexa/terms policy documents unauthenticated.
+app.use("/alexa", alexaAuth);
 
 // Health check
 app.get("/", ({ json }) => json({ data: "ok" }, 200));

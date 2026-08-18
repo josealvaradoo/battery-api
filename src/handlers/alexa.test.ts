@@ -142,3 +142,29 @@ describe("POST /alexa", () => {
     expect(mockErrorResponse).toHaveBeenCalledTimes(1);
   });
 });
+
+describe("GET /alexa/privacy", () => {
+  test("returns 200 with the privacy policy HTML", async () => {
+    const res = await alexa.request("/privacy");
+    const html = await res.text();
+
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Content-Type")).toContain("text/html");
+    expect(html).toContain("Política de Privacidad");
+    expect(html).toContain("alexa@josealvarado.dev");
+    expect(html).toContain("no recopila, almacena ni comparte datos personales");
+  });
+});
+
+describe("GET /alexa/terms", () => {
+  test("returns 200 with the terms of use HTML", async () => {
+    const res = await alexa.request("/terms");
+    const html = await res.text();
+
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Content-Type")).toContain("text/html");
+    expect(html).toContain("Términos de Uso");
+    expect(html).toContain("alexa@josealvarado.dev");
+    expect(html).toContain("uso personal y doméstico");
+  });
+});
