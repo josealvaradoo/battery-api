@@ -10,6 +10,7 @@
 - alexa: verify skill id against ALEXA_SKILL_IDS whitelist before processing requests
 - alexa: handle battery level and home consumption intents with cached Growatt data
 - alexa: add interaction model JSON for the Alexa Developer Console
+- alexa: add public GET /alexa/privacy and GET /alexa/terms policy documents
 - tests: isolate test files to prevent mock.module leakage between suites
 
 ## 0.4.0 (2026-08-06)
