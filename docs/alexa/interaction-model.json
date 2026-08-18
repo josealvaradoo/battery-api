@@ -1,0 +1,52 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "planta",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": ["cancelar", "cancela", "cancelar todo"]
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": [
+            "ayuda",
+            "ayúdame",
+            "qué puedo hacer",
+            "qué opciones tengo",
+            "para qué sirve esto"
+          ]
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": ["para", "detente", "stop", "terminar", "salir"]
+        },
+        {
+          "name": "BatteryLevelIntent",
+          "samples": [
+            "cuánta batería queda",
+            "qué nivel tiene la batería",
+            "cuánto queda de batería",
+            "dime la batería",
+            "batería",
+            "nivel de batería",
+            "cuál es el nivel de la batería",
+            "carga de la batería"
+          ]
+        },
+        {
+          "name": "HomeConsumptionIntent",
+          "samples": [
+            "cuánto consume el hogar",
+            "consumo actual",
+            "qué consumo hay",
+            "cuánta energía se consume",
+            "consumo de energía",
+            "cuánto estoy consumiendo"
+          ]
+        }
+      ],
+      "types": []
+    }
+  }
+}
