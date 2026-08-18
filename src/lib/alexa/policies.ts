@@ -10,7 +10,7 @@ export const PRIVACY_POLICY_HTML = `<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Política de Privacidad — Planta</title>
+    <title>Política de Privacidad — HomeWatt</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -58,7 +58,7 @@ export const TERMS_OF_USE_HTML = `<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Términos de Uso — Planta</title>
+    <title>Términos de Uso — HomeWatt</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -80,7 +80,7 @@ export const TERMS_OF_USE_HTML = `<!DOCTYPE html>
     <h1>Términos de Uso</h1>
     <p class="meta">Última actualización: 17 de agosto de 2026</p>
     <h2>1. Descripción del servicio</h2>
-    <p><strong>Planta</strong> es una skill de Alexa que proporciona información de monitoreo de un inversor solar, incluyendo nivel de batería, producción solar y consumo del hogar. El servicio es de uso personal y gratuito.</p>
+    <p><strong>HomeWatt</strong> es una skill de Alexa que proporciona información de monitoreo de un inversor solar, incluyendo nivel de batería, producción solar y consumo del hogar. El servicio es de uso personal y gratuito.</p>
     <h2>2. Uso aceptable</h2>
     <p>El usuario se compromete a utilizar esta skill únicamente para su uso personal y doméstico. No está permitido utilizar la skill con fines comerciales, de reventa o de cualquier forma que pueda dañar o sobrecargar el servicio.</p>
     <h2>3. Disponibilidad</h2>
