@@ -1,0 +1,239 @@
+# Alexa skill endpoint (POST /alexa)
+# NOTE: ALEXA_SKILL_IDS env var must contain the skill ID used in the
+# request bodies below (e.g. amzn1.ask.skill.xxxxxxxx), otherwise the
+# endpoint returns 401.
+
+@url = http://localhost:3000/alexa
+
+
+### LaunchRequest (welcome message, session stays open)
+
+POST {{ url }} HTTP/1.1
+Content-Type: application/json
+
+{
+  "version": "1.0",
+  "session": {
+    "new": true,
+    "sessionId": "amzn1.echo-api.session.0000000-0000-0000-0000-00000000000",
+    "application": {
+      "applicationId": "amzn1.ask.skill.xxxxxxxx"
+    },
+    "user": {
+      "userId": "amzn1.ask.account.xxxxxxxx"
+    }
+  },
+  "context": {
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.xxxxxxxx"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.xxxxxxxx"
+      }
+    }
+  },
+  "request": {
+    "type": "LaunchRequest",
+    "requestId": "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000",
+    "timestamp": "2024-01-01T00:00:00Z",
+    "locale": "es-US"
+  }
+}
+
+
+### BatteryLevelIntent (battery level, session ends)
+
+POST {{ url }} HTTP/1.1
+Content-Type: application/json
+
+{
+  "version": "1.0",
+  "session": {
+    "new": false,
+    "sessionId": "amzn1.echo-api.session.0000000-0000-0000-0000-00000000000",
+    "application": {
+      "applicationId": "amzn1.ask.skill.xxxxxxxx"
+    },
+    "user": {
+      "userId": "amzn1.ask.account.xxxxxxxx"
+    }
+  },
+  "context": {
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.xxxxxxxx"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.xxxxxxxx"
+      }
+    }
+  },
+  "request": {
+    "type": "IntentRequest",
+    "requestId": "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000",
+    "timestamp": "2024-01-01T00:00:00Z",
+    "locale": "es-US",
+    "intent": {
+      "name": "BatteryLevelIntent",
+      "confirmationStatus": "NONE"
+    }
+  }
+}
+
+
+### HomeConsumptionIntent (home consumption, session ends)
+
+POST {{ url }} HTTP/1.1
+Content-Type: application/json
+
+{
+  "version": "1.0",
+  "session": {
+    "new": false,
+    "sessionId": "amzn1.echo-api.session.0000000-0000-0000-0000-00000000000",
+    "application": {
+      "applicationId": "amzn1.ask.skill.xxxxxxxx"
+    },
+    "user": {
+      "userId": "amzn1.ask.account.xxxxxxxx"
+    }
+  },
+  "context": {
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.xxxxxxxx"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.xxxxxxxx"
+      }
+    }
+  },
+  "request": {
+    "type": "IntentRequest",
+    "requestId": "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000",
+    "timestamp": "2024-01-01T00:00:00Z",
+    "locale": "es-US",
+    "intent": {
+      "name": "HomeConsumptionIntent",
+      "confirmationStatus": "NONE"
+    }
+  }
+}
+
+
+### AMAZON.HelpIntent (help message, session stays open)
+
+POST {{ url }} HTTP/1.1
+Content-Type: application/json
+
+{
+  "version": "1.0",
+  "session": {
+    "new": false,
+    "sessionId": "amzn1.echo-api.session.0000000-0000-0000-0000-00000000000",
+    "application": {
+      "applicationId": "amzn1.ask.skill.xxxxxxxx"
+    },
+    "user": {
+      "userId": "amzn1.ask.account.xxxxxxxx"
+    }
+  },
+  "context": {
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.xxxxxxxx"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.xxxxxxxx"
+      }
+    }
+  },
+  "request": {
+    "type": "IntentRequest",
+    "requestId": "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000",
+    "timestamp": "2024-01-01T00:00:00Z",
+    "locale": "es-US",
+    "intent": {
+      "name": "AMAZON.HelpIntent",
+      "confirmationStatus": "NONE"
+    }
+  }
+}
+
+
+### AMAZON.StopIntent (goodbye, session ends)
+
+POST {{ url }} HTTP/1.1
+Content-Type: application/json
+
+{
+  "version": "1.0",
+  "session": {
+    "new": false,
+    "sessionId": "amzn1.echo-api.session.0000000-0000-0000-0000-00000000000",
+    "application": {
+      "applicationId": "amzn1.ask.skill.xxxxxxxx"
+    },
+    "user": {
+      "userId": "amzn1.ask.account.xxxxxxxx"
+    }
+  },
+  "context": {
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.xxxxxxxx"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.xxxxxxxx"
+      }
+    }
+  },
+  "request": {
+    "type": "IntentRequest",
+    "requestId": "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000",
+    "timestamp": "2024-01-01T00:00:00Z",
+    "locale": "es-US",
+    "intent": {
+      "name": "AMAZON.StopIntent",
+      "confirmationStatus": "NONE"
+    }
+  }
+}
+
+
+### SessionEndedRequest (no outputSpeech, session ends)
+
+POST {{ url }} HTTP/1.1
+Content-Type: application/json
+
+{
+  "version": "1.0",
+  "session": {
+    "new": false,
+    "sessionId": "amzn1.echo-api.session.0000000-0000-0000-0000-00000000000",
+    "application": {
+      "applicationId": "amzn1.ask.skill.xxxxxxxx"
+    },
+    "user": {
+      "userId": "amzn1.ask.account.xxxxxxxx"
+    }
+  },
+  "context": {
+    "System": {
+      "application": {
+        "applicationId": "amzn1.ask.skill.xxxxxxxx"
+      },
+      "user": {
+        "userId": "amzn1.ask.account.xxxxxxxx"
+      }
+    }
+  },
+  "request": {
+    "type": "SessionEndedRequest",
+    "requestId": "amzn1.echo-api.request.0000000-0000-0000-0000-00000000000",
+    "timestamp": "2024-01-01T00:00:00Z",
+    "locale": "es-US",
+    "reason": "USER_INITIATED"
+  }
+}
