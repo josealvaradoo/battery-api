@@ -29,7 +29,7 @@ export default class Memory {
 
   public get<T = Value>(key: string): T | null {
     try {
-      const value = this.data[key]?.value as T ?? null;
+      const value = (this.data[key]?.value as T) ?? null;
 
       // Check if the key exists and if it's still valid
       if (this.data[key].expires < Date.now()) {

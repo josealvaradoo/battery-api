@@ -23,3 +23,9 @@ x-api-key: {{ api_key }}
 
 GET {{ url }} HTTP/1.1
 Authorization: Bearer {{jwt}}
+
+
+### Get battery status with API key auth as query param
+
+GET {{ url }}?apiKey={{ api_key }} HTTP/1.1
+
